@@ -25,7 +25,7 @@ exec /bin/sh /etc/X11/Xsession
 ```
 with `startxfce4`
 
-sudo systemctl restart xrdp
+```sudo systemctl restart xrdp```
 
 
 Run a reverse tunnel on cloudflared 
