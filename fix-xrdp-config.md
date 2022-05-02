@@ -1,5 +1,5 @@
 # xrdp config issue
-sometimes happens sometimes you break things in xrdp configurations, at this point, you will encounter errors such as this:
+sometimes happens you break things in xrdp configurations, at this point, you will encounter errors such as this:
 
 ![image](resources/Screenshot%20at%202022-05-02%2020-26-44.png)
 
