@@ -14,3 +14,10 @@ unset DBUS_SESSION_BUS_ADDRESS
 unset XDG_RUNTIME_DIR
 ```
 sudo systemctl restart xrdp
+
+
+Run a reverse tunnel on cloudflared 
+```
+cloudflared access ssh --hostname rdp-benihime.kaizoku.cyou --url localhost:6665
+
+```
