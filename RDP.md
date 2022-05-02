@@ -13,6 +13,18 @@ Add these lines just before the lines that test & execute Xsession as shown in t
 unset DBUS_SESSION_BUS_ADDRESS
 unset XDG_RUNTIME_DIR
 ```
+
+```
+sudo nano /etc/xrdp/startwm.sh
+```
+In this file, replace the lines
+
+```
+test -x /etc/X11/Xsession && exec /etc/X11/Xsession
+exec /bin/sh /etc/X11/Xsession
+```
+with `startxfce4`
+
 sudo systemctl restart xrdp
 
 
