@@ -20,7 +20,7 @@ You will see the following output (or something similar to it):
 
 ![image](resources/Screenshot%20at%202022-05-02%2020-32-08.png)
 
-> now xrdp is having default configuration it ever had- you have to start configuring it from zero. this time make sure you doesn't mess up its config stuff tho
+> now xrdp is having default configuration it ever had- you have to start configuring it from zero. this time make sure you doesn't mess up its config stuff tho. take a look at [this file](RDP.md) for more information.
 
 
 Also, don't forget to restart the service after you are done doing configuration stuff:
