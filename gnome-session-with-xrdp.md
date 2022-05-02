@@ -77,4 +77,18 @@ set up these configuration the way you want and hit next button:
 
 ![image](resources/Screenshot%20at%202022-05-02%2020-56-24.png)
 
+<hr/>
+
+## references:
+Here are some websites references I used to reach to these steps, it might be good if you pay them a visit in a case something went wrong somewhere somehow somewhat:
+
+- https://www.hiroom2.com/2018/04/29/ubuntu-1804-xrdp-gnome-en/
+- https://askubuntu.com/questions/234856/unable-to-do-remote-desktop-using-xrdp
+- https://github.com/neutrinolabs/xrdp/issues/1614
+- https://serverspace.io/support/help/how-to-configure-xrdp-server-on-ubuntu-18-04/
+- https://c-nergy.be/blog/?p=5382
+- https://www.e2enetworks.com/help/knowledge-base/how-to-install-remote-desktop-xrdp-on-ubuntu-18-04/
+- https://linuxize.com/post/how-to-install-xrdp-on-ubuntu-20-04/
+
+A small warning from here: in the time I wrote this file, all of these websites are working fine, if you find any of the following link broken or something, it means the post is either removed or moved.
 
