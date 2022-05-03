@@ -1,8 +1,10 @@
+## Basic setup
 https://www.tecmint.com/install-xrdp-on-ubuntu/
 
 ```
 sudo apt install ubuntu-desktop && sudo apt install xrdp && sudo systemctl status xrdp && sudo adduser ubuntu ssl-cert
 ```
+
 Black screen fix 
 ```
 sudo nano /etc/xrdp/startwm.sh
@@ -33,3 +35,10 @@ Run a reverse tunnel on cloudflared
 cloudflared access ssh --hostname rdp-benihime.kaizoku.cyou --url localhost:6665
 
 ```
+
+<hr/>
+
+## How to change the password xrdp accepts
+You have to do `sudo passwd rdp_user`.
+
+In our case, it's `sudo passwd ubuntu`.
