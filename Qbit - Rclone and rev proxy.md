@@ -31,7 +31,8 @@ WantedBy=multi-user.target
 	
 2. Installing and setting up RClone Mount
 	
-```(curl https://rclone.org/install.sh | sudo bash) && rclone config && ((echo "mkdir /root/.config/ && mkdir /root/.config/rclone/ && cp /home/ubuntu/.config/rclone/rclone.conf /root/.config/rclone/. && exit") | sudo bash) && mkdir /home/ubuntu/qBit/ && mkdir /home/ubuntu/qBit/PT/ && sudo vim /etc/systemd/system/rclone-mount.service && sudo service rclone-mount start && sudo systemctl enable rclone-mount && sudo service rclone-mount status
+```
+(curl https://rclone.org/install.sh | sudo bash) && rclone config && ((echo "mkdir /root/.config/ && mkdir /root/.config/rclone/ && cp /home/ubuntu/.config/rclone/rclone.conf /root/.config/rclone/. && exit") | sudo bash) && mkdir /home/ubuntu/qBit/ && mkdir /home/ubuntu/qBit/PT/ && sudo vim /etc/systemd/system/rclone-mount.service && sudo service rclone-mount start && sudo systemctl enable rclone-mount && sudo service rclone-mount status
 ```
 	
 #---RClone Mount Service File---#
