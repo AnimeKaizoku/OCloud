@@ -102,7 +102,8 @@ server {
 
 	
 4. Installing and setting up Certbot and a SSL certificate
+Make sure you edit the email and domain here in the command before you execute it.
 
 ```
-sudo apt install software-properties-common && sudo apt install certbot python3-certbot-nginx && sudo certbot --nginx --redirect --agree-tos --hsts --staple-ocsp --email notabstergo@gmail.com -d iroha.imyr.cf
+sudo apt install software-properties-common && sudo apt install certbot python3-certbot-nginx && sudo certbot --nginx --redirect --agree-tos --hsts --staple-ocsp --email emailhere@gmail.com -d domainhere.com
 ```
