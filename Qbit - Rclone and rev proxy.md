@@ -1,12 +1,15 @@
 0. Pre-commands
 Open the damn ports and run:
 
-`sudo apt update && sudo apt upgrade -y && sudo iptables -F`
+```
+sudo apt update && sudo apt upgrade -y && sudo iptables -F
+```
 
 
 1. Installing and setting up qBittorrent NOX	
 	
-`sudo add-apt-repository -y ppa:qbittorrent-team/qbittorrent-stable && sudo apt install -y qbittorrent-nox && qbittorrent-nox --version && sudo vim /etc/systemd/system/qbittorrent-nox.service && sudo service qbittorrent-nox start && sudo systemctl enable qbittorrent-nox && sudo service qbittorrent-nox status`
+```sudo add-apt-repository -y ppa:qbittorrent-team/qbittorrent-stable && sudo apt install -y qbittorrent-nox && qbittorrent-nox --version && sudo vim /etc/systemd/system/qbittorrent-nox.service && sudo service qbittorrent-nox start && sudo systemctl enable qbittorrent-nox && sudo service qbittorrent-nox status
+```
 
 
 #---qBittorrent Service File---#
@@ -27,7 +30,8 @@ WantedBy=multi-user.target
 	
 2. Installing and setting up RClone Mount
 	
-`(curl https://rclone.org/install.sh | sudo bash) && rclone config && ((echo "mkdir /root/.config/ && mkdir /root/.config/rclone/ && cp /home/ubuntu/.config/rclone/rclone.conf /root/.config/rclone/. && exit") | sudo bash) && mkdir /home/ubuntu/qBit/ && mkdir /home/ubuntu/qBit/PT/ && sudo vim /etc/systemd/system/rclone-mount.service && sudo service rclone-mount start && sudo systemctl enable rclone-mount && sudo service rclone-mount status`
+```(curl https://rclone.org/install.sh | sudo bash) && rclone config && ((echo "mkdir /root/.config/ && mkdir /root/.config/rclone/ && cp /home/ubuntu/.config/rclone/rclone.conf /root/.config/rclone/. && exit") | sudo bash) && mkdir /home/ubuntu/qBit/ && mkdir /home/ubuntu/qBit/PT/ && sudo vim /etc/systemd/system/rclone-mount.service && sudo service rclone-mount start && sudo systemctl enable rclone-mount && sudo service rclone-mount status
+```
 	
 #---RClone Mount Service File---#
 ```
@@ -67,7 +71,9 @@ WantedBy=default.target
 	
 3. Installing and setting up Nginx
 
-`sudo apt install nginx -y && sudo systemctl start nginx && sudo vim /etc/nginx/sites-available/iroha.imyr.cf && sudo ln -s /etc/nginx/sites-available/iroha.imyr.cf /etc/nginx/sites-enabled/ && sudo rm /etc/nginx/sites-enabled/default && sudo systemctl restart nginx && sudo systemctl status nginx`
+```
+sudo apt install nginx -y && sudo systemctl start nginx && sudo vim /etc/nginx/sites-available/iroha.imyr.cf && sudo ln -s /etc/nginx/sites-available/iroha.imyr.cf /etc/nginx/sites-enabled/ && sudo rm /etc/nginx/sites-enabled/default && sudo systemctl restart nginx && sudo systemctl status nginx
+```
 
 #---Nginx Config File---#
 ```	
@@ -95,4 +101,6 @@ server {
 	
 4. Installing and setting up Certbot and a SSL certificate
 
-`sudo apt install software-properties-common && sudo apt install certbot python3-certbot-nginx && sudo certbot --nginx --redirect --agree-tos --hsts --staple-ocsp --email notabstergo@gmail.com -d iroha.imyr.cf`
+```
+sudo apt install software-properties-common && sudo apt install certbot python3-certbot-nginx && sudo certbot --nginx --redirect --agree-tos --hsts --staple-ocsp --email notabstergo@gmail.com -d iroha.imyr.cf
+```
