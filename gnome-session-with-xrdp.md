@@ -23,6 +23,12 @@ use the following command to install `gnome-session` and its dependencies:
 sudo apt-get install gnome-session
 ```
 
+## tell xrdp to bring up gnome-session
+The following command will tell xrdp to use gnome-session (instead of using xfce-session or mate-session):
+```sh
+sudo sed -i.bak '/fi/a #xrdp multiple users configuration \n gnome-session \n' /etc/xrdp/startwm.sh
+```
+
 Disable `newcursors` because black background around cursor is displayed if using Xorg as session type.
 
 ```sh
@@ -34,6 +40,67 @@ then restart the xrdp
 ```sh
 sudo systemctl restart xrdp
 ```
+
+Now, `/etc/xrdp/startwm.sh` should look like something like this (please check the content by running `cat /etc/xrdp/startwm.sh`):
+
+```sh
+#!/bin/sh
+# xrdp X session start script (c) 2015, 2017 mirabilos
+# published under The MirOS Licence
+
+if test -r /etc/profile; then
+#xrdp multiple users configuration 
+ gnome-session 
+
+	. /etc/profile
+#xrdp multiple users configuration 
+ gnome-session 
+
+fi
+#xrdp multiple users configuration 
+ gnome-session 
+
+
+if test -r /etc/default/locale; then
+	. /etc/default/locale
+	test -z "${LANG+x}" || export LANG
+	test -z "${LANGUAGE+x}" || export LANGUAGE
+	test -z "${LC_ADDRESS+x}" || export LC_ADDRESS
+	test -z "${LC_ALL+x}" || export LC_ALL
+	test -z "${LC_COLLATE+x}" || export LC_COLLATE
+	test -z "${LC_CTYPE+x}" || export LC_CTYPE
+	test -z "${LC_IDENTIFICATION+x}" || export LC_IDENTIFICATION
+	test -z "${LC_MEASUREMENT+x}" || export LC_MEASUREMENT
+	test -z "${LC_MESSAGES+x}" || export LC_MESSAGES
+	test -z "${LC_MONETARY+x}" || export LC_MONETARY
+	test -z "${LC_NAME+x}" || export LC_NAME
+	test -z "${LC_NUMERIC+x}" || export LC_NUMERIC
+	test -z "${LC_PAPER+x}" || export LC_PAPER
+	test -z "${LC_TELEPHONE+x}" || export LC_TELEPHONE
+	test -z "${LC_TIME+x}" || export LC_TIME
+	test -z "${LOCPATH+x}" || export LOCPATH
+fi
+#xrdp multiple users configuration 
+ gnome-session 
+
+
+if test -r /etc/profile; then
+#xrdp multiple users configuration 
+ gnome-session 
+
+	. /etc/profile
+#xrdp multiple users configuration 
+ gnome-session 
+
+fi
+#xrdp multiple users configuration 
+ gnome-session 
+
+
+test -x /etc/X11/Xsession && exec /etc/X11/Xsession
+exec /bin/sh /etc/X11/Xsession
+```
+
 
 ## Create ~/.xsessionrc
 Create ~/.xsessionrc which will export the environment variable for customized settings for Ubuntu.
@@ -52,6 +119,10 @@ export XDG_DATA_DIRS=${D}
 export XDG_CONFIG_DIRS=/etc/xdg/xdg-ubuntu:/etc/xdg
 EOF
 ```
+
+Now please edit the `~/.Xclients` file (create it if it doesn't exist) and change the content to `gnome-session`. At the end `cat ~/.Xclients` should give the following output:
+
+![image](resources/Screenshot%20at%202022-05-03%2007-02-49.png)
 
 ## reboot the system
 I'm not sure if this is required or not, but it this method didn't work for me without rebooting the system.
