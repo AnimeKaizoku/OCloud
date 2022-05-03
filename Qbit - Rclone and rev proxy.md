@@ -8,7 +8,8 @@ sudo apt update && sudo apt upgrade -y && sudo iptables -F
 
 1. Installing and setting up qBittorrent NOX	
 	
-```sudo add-apt-repository -y ppa:qbittorrent-team/qbittorrent-stable && sudo apt install -y qbittorrent-nox && qbittorrent-nox --version && sudo vim /etc/systemd/system/qbittorrent-nox.service && sudo service qbittorrent-nox start && sudo systemctl enable qbittorrent-nox && sudo service qbittorrent-nox status
+```
+sudo add-apt-repository -y ppa:qbittorrent-team/qbittorrent-stable && sudo apt install -y qbittorrent-nox && qbittorrent-nox --version && sudo vim /etc/systemd/system/qbittorrent-nox.service && sudo service qbittorrent-nox start && sudo systemctl enable qbittorrent-nox && sudo service qbittorrent-nox status
 ```
 
 
