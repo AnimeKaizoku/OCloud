@@ -2,7 +2,9 @@
 This copy paste does the following 
 
  • Update and Upgrade dependencies, remove whats not needed
+
  • Install Neofetch
+
  • Install Speedtest cli
  • Install fail2ban and enable it
  • Change the hostname to what you like and make it persistent
