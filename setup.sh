@@ -137,9 +137,48 @@ EOF
 fi
 
 if [[ $VNC -eq 1 ]]; then
-    echoe "+++ VNC setup"
-    echoe "it's not finished"
-    exit 1
+    echoe "+++ VNC setup (you will be prompted for your VNC password)"
+
+    echoe "+ Installing dependencies"
+    sudo apt-get install -y xfce4{,-goodies} tigervncserver
+
+    echoe "+ Adding files"
+    [[ -e "~/.vnc/xstartup" ]] && mv ~/.vnc/xstartup{,.bak}
+    mkdir -p ~/.vnc
+cat > ~/.vnc/xstartup << EOF
+#!/bin/sh
+xrdb ~/.Xresources
+startxfce4 &
+EOF
+    chmod +x ~/.vnc/xstartup
+
+sudo tee /etc/systemd/system/vncserver@.service > /dev/null << EOF
+[Unit]
+Description=Start TightVNC server at startup
+After=syslog.target network.target
+
+[Service]
+Type=forking
+User=$(id -nn)
+Group=$(id -gn)
+WorkingDirectory=$HOME
+
+PIDFile=$HOME/.vnc/%H:%i.pid
+ExecStartPre=-/usr/bin/vncserver -kill :%i > /dev/null 2>&1
+ExecStart=/usr/bin/vncserver -depth 24 -geometry 1280x800 -localhost :%i
+ExecStop=/usr/bin/vncserver -kill :%i
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+    echoe "+ Setting VNC password"
+    vncpasswd
+
+    echoe "+ Staring vncserver"
+    sudo systemctl daemon-reload
+    sudo systemctl enable --now vncserver@1
+    systemctl status vncserver@1
 fi
 
 if [[ $RDP -eq 1 ]]; then
