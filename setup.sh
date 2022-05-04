@@ -5,6 +5,7 @@ BASIC=0
 VNC=0
 RDP=0
 HOSTNAME=""
+DEBNI="DEBIAN_FRONTEND=noninteractive"
 function echoe() {
     echo "$@" >&2
 }
@@ -77,13 +78,13 @@ if [[ $BASIC -eq 1 ]]; then
     fi
 
     echoe "+ Updating repositories"
-    sudo apt-get update -y
+    sudo $DEBNI apt-get update -y
     echoe "+ Updating packages"
-    sudo apt-get upgrade -y
+    sudo $DEBNI apt-get upgrade -y
     echoe "+ Installing packages"
-    sudo apt-get install -y neofetch speedtest-cli python3{,-pip} fail2ban iptables-persistent
+    sudo $DEBNI apt-get install -y neofetch speedtest-cli python3{,-pip} fail2ban iptables-persistent
     echoe "+ Removing unused dependencies"
-    sudo apt-get autoremove -y
+    sudo $DEBNI apt-get autoremove -y
 
     echoe "+ Downloading go 1.18.1"
     GOTAR=$(mktemp)
@@ -140,7 +141,7 @@ if [[ $VNC -eq 1 ]]; then
     echoe "+++ VNC setup (you will be prompted for your VNC password)"
 
     echoe "+ Installing dependencies"
-    sudo apt-get install -y xfce4{,-goodies} tightvncserver
+    sudo $DEBNI apt-get install -y xfce4{,-goodies} tightvncserver
 
     echoe "+ Adding files"
     [[ -e "~/.vnc/xstartup" ]] && mv ~/.vnc/xstartup{,.bak}
@@ -159,7 +160,7 @@ After=syslog.target network.target
 
 [Service]
 Type=forking
-User=$(id -nn)
+User=$(id -un)
 Group=$(id -gn)
 WorkingDirectory=$HOME
 
