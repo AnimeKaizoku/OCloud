@@ -184,6 +184,36 @@ fi
 
 if [[ $RDP -eq 1 ]]; then
     echoe "+++ RDP setup"
-    echoe "it's not finished"
-    exit 1
+
+    echoe "+ Installing dependencies"
+    sudo $DEBNI apt-get install -y ubuntu-desktop gnome-session xrdp
+    systemctl status xrdp
+    sudo usermod -aG ssl-cert xrdp
+
+    echoe "+ Editing files"
+    sudo sed -iE 's/^new_cursors=true/new_cursors=false/' /etc/xrdp/xrdp.ini
+sudo patch /etc/xrdp/startwm.sh << EOF
+--- a/etc/xrdp/startwm.sh	2020-01-10 20:14:57.000000000 +0000
++++ b/etc/xrdp/startwm.sh	2022-05-04 13:14:39.311623941 +0000
+@@ -30,5 +30,7 @@
+ 	. /etc/profile
+ fi
+ 
+-test -x /etc/X11/Xsession && exec /etc/X11/Xsession
+-exec /bin/sh /etc/X11/Xsession
++#test -x /etc/X11/Xsession && exec /etc/X11/Xsession
++#exec /bin/sh /etc/X11/Xsession
++unset DBUS_SESSION_BUS_ADDRESS XDG_RUNTIME_DIR
++exec gnome-session
+EOF
+cat > ~/.xsessionrc << EOF
+export GNOME_SHELL_SESSION_MODE=ubuntu
+export XDG_CURRENT_DESKTOP=ubuntu:GNOME
+export XDG_DATA_DIRS=/usr/share/ubuntu:/usr/local/share:/usr/share:/var/lib/snapd/desktop
+export XDG_CONFIG_DIRS=/etc/xdg/xdg-ubuntu:/etc/xdg
+EOF
+
+    sudo systemctl restart xrdp
+    echoe "xrdp uses the account's password to login. To change it, run"
+    echoe "sudo passwd $(id -un)"
 fi
