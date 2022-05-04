@@ -4,7 +4,7 @@ A small repo with set of one run commands to set specific stuff on Ubuntu Env
 
 
 ```
-wget https://raw.githubusercontent.com/AnimeKaizoku/OCloud/main/setup.sh && sudo chmod +x setup.sh && ./setup.sh hostname
+wget https://raw.githubusercontent.com/AnimeKaizoku/OCloud/main/setup.sh && bash setup.sh senbonzakura
 ```
 
 
