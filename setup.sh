@@ -13,7 +13,7 @@ function usage() {
     echoe "Usage: ./setup.sh [-bvr] [hostname]"
     echoe "Options:"
     echoe "    -b: Run basic setup, implicitly set if no arguments are passed"
-    echoe "    -v: Run VNC setup"
+    echoe "    -v: Run VNC setup (interaction needed for password)"
     echoe "    -r: Run RDP setup"
     echoe "Arguments:"
     echoe "    hostname: To be set hostname of the machine, required if -b is set"
