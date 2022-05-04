@@ -26,7 +26,7 @@ sudo apt-get install gnome-session
 ## tell xrdp to bring up gnome-session
 The following command will tell xrdp to use gnome-session (instead of using xfce-session or mate-session):
 ```sh
-sudo sed -i.bak '/fi/a #xrdp multiple users configuration \n gnome-session \n' /etc/xrdp/startwm.sh
+sudo sed -Ezi.bak "s@test -x (/etc/X11/Xsession) && exec \1\nexec /bin/sh \1@exec gnome-session@" /etc/xrdp/startwm.sh
 ```
 
 Disable `newcursors` because black background around cursor is displayed if using Xorg as session type.
@@ -49,17 +49,8 @@ Now, `/etc/xrdp/startwm.sh` should look like something like this (please check t
 # published under The MirOS Licence
 
 if test -r /etc/profile; then
-#xrdp multiple users configuration 
- gnome-session 
-
 	. /etc/profile
-#xrdp multiple users configuration 
- gnome-session 
-
 fi
-#xrdp multiple users configuration 
- gnome-session 
-
 
 if test -r /etc/default/locale; then
 	. /etc/default/locale
@@ -80,25 +71,12 @@ if test -r /etc/default/locale; then
 	test -z "${LC_TIME+x}" || export LC_TIME
 	test -z "${LOCPATH+x}" || export LOCPATH
 fi
-#xrdp multiple users configuration 
- gnome-session 
-
 
 if test -r /etc/profile; then
-#xrdp multiple users configuration 
- gnome-session 
-
 	. /etc/profile
-#xrdp multiple users configuration 
- gnome-session 
-
 fi
-#xrdp multiple users configuration 
- gnome-session 
 
-
-test -x /etc/X11/Xsession && exec /etc/X11/Xsession
-exec /bin/sh /etc/X11/Xsession
+exec gnome-session
 ```
 
 
