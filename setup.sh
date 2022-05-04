@@ -140,7 +140,7 @@ if [[ $VNC -eq 1 ]]; then
     echoe "+++ VNC setup (you will be prompted for your VNC password)"
 
     echoe "+ Installing dependencies"
-    sudo apt-get install -y xfce4{,-goodies} tigervncserver
+    sudo apt-get install -y xfce4{,-goodies} tightvncserver
 
     echoe "+ Adding files"
     [[ -e "~/.vnc/xstartup" ]] && mv ~/.vnc/xstartup{,.bak}
