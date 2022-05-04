@@ -173,7 +173,7 @@ ExecStop=/usr/bin/vncserver -kill :%i
 WantedBy=multi-user.target
 EOF
 
-    echoe "+ Setting VNC password"
+    echoe "+ Setting VNC password (password not echoed back)"
     vncpasswd
 
     echoe "+ Staring vncserver"
