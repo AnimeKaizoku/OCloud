@@ -11,10 +11,6 @@ set -x
 sudo apt update -y
 sudo apt upgrade -y
 sudo apt install -y neofetch speedtest-cli python3{,-pip} fail2ban iptables-persistent
-CFPKG=$(mktemp)
-wget --ourput-document="$CFPKG" https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-arm64.deb
-sudo dpkg -i "$CFPKG"
-rm "$CFPKG"
 sudo apt autoremove -y
 
 GOTAR=$(mktemp)
