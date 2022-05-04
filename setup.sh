@@ -215,5 +215,5 @@ EOF
 
     sudo systemctl restart xrdp
     echoe "xrdp uses the account's password to login. To change it, run"
-    echoe "sudo passwd $(id -un)"
+    echoe "\"sudo passwd $(id -un)\" (your password won't be echoed back)"
 fi
