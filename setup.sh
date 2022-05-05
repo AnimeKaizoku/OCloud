@@ -155,7 +155,6 @@ if [[ $BASICSET -eq 1 ]]; then
 
     echoe "+ Enabling fail2ban"
     sudo systemctl enable fail2ban
-    systemctl status fail2ban
     echoe "+ Setting hostname to $HOSTNAME"
     sudo sed -i '/preserve_hostname: false/c\preserve_hostname: true' /etc/cloud/cloud.cfg
     sudo hostnamectl set-hostname -- "$HOSTNAME"
@@ -236,7 +235,6 @@ EOF
     echoe "+ Staring vncserver"
     systemctl --user daemon-reload
     systemctl --user enable --now tigervnc@:1
-    systemctl --user status tigervnc@:1
     # https://unix.stackexchange.com/a/559755
     sudo loginctl enable-linger "$(id -un)"
 fi
@@ -246,7 +244,6 @@ if [[ $RDPSET -eq 1 ]]; then
 
     echoe "+ Installing dependencies"
     sudo $DEBNI apt-get install -y $(depackages $RDP) xrdp
-    systemctl status xrdp
     sudo usermod -aG ssl-cert xrdp
 
     echoe "+ Adding files"
