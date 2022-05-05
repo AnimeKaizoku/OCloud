@@ -201,7 +201,7 @@ if [[ $VNCSET -eq 1 ]]; then
 
     echoe "+ Adding files"
     # Modified https://wiki.archlinux.org/title/TigerVNC#systemd_service_unit_run_as_user
-sudo tee /usr/lib/systemd/system/tigervnc@.service > /dev/null << EOF
+sudo tee /usr/lib/systemd/user/tigervnc@.service > /dev/null << EOF
 [Unit]
 Description=Remote desktop service (VNC)
 After=syslog.target network.target
