@@ -1,59 +1,120 @@
 #!/bin/bash
 
 set -e
-BASIC=0
-VNC=0
-RDP=0
+BASICSET=0
 HOSTNAME=""
+DEFAULTDE=gnome
+DEFAULTDESET=0
+VNC=$DEFAULTDE
+VNCSET=0
+RDP=$DEFAULTDE
+RDPSET=0
+
 DEBNI="DEBIAN_FRONTEND=noninteractive"
+PROGNAME="$0"
+function validde() {
+    [[ "$@" = xfce || "$@" = gnome || "$@" = kde || -z "$@" ]]
+}
+function depackages() {
+    case "$@" in
+        "xfce")
+            echo "xfce4{,-goodies}"
+        ;;
+        "gnome")
+            echo "ubuntu-desktop gnome-session"
+        ;;
+        "kde")
+            echo "kde-plasma-desktop"
+        ;;
+        *)
+            echoe "Unknown DE \"$@\" passed into depackages"
+            exit 1
+        ;;
+    esac
+}
+function decommand() {
+    case "$@" in
+        "xfce")
+            echo "exec startxfce4"
+        ;;
+        "gnome")
+            echo "XDG_SESSION_TYPE=x11 GDK_BACKEND=x11 exec gnome-session"
+        ;;
+        "kde")
+            echo "DESKTOP_SESSION=plasma exec startplasma-x11"
+        ;;
+        *)
+            echoe "Unknown DE \"$@\" passed into decommand"
+            exit 1
+        ;;
+    esac
+}
 function echoe() {
     echo "$@" >&2
 }
 function usage() {
-    echoe "Usage: ./setup.sh [-bvr] [hostname]"
+    echoe "Usage: $PROGNAME [--basic <new hostname>] [--de xfce|gnome|kde] [--vnc [de]] [--rdp [de]]"
     echoe "Options:"
-    echoe "    -b: Run basic setup, implicitly set if no arguments are passed"
-    echoe "    -v: Run VNC setup (interaction needed for password)"
-    echoe "    -r: Run RDP setup"
-    echoe "Arguments:"
-    echoe "    hostname: To be set hostname of the machine, required if -b is set"
+    echoe "    -b, --basic: Run basic setup"
+    echoe "    -d, --de: Set default DE for VNC and RDP (default: gnome)"
+    echoe "    -v, --vnc: Run VNC setup (interaction needed for password)"
+    echoe "    -r, --rdp: Run RDP setup"
     exit 1
 }
 
 # getopt usage stolen from /usr/share/doc/util-linux/getopt-example.bash
-GETOPT_RES=$(getopt bvr $@)
+set +e # we want rc from getopt
+GETOPT_RES=$(getopt -o "b:d:v::r::" --long "basic:,de:,vnc::,rdp::" -n "$PROGNAME" -- "$@")
+set -e
 GETOPT_EC=$?
 [[ $GETOPT_EC -eq 1 ]] && usage
 [[ $GETOPT_EC -ne 0 ]] && exit $GETOPT_EC
 eval set -- "$GETOPT_RES"
 unset GETOPT_RES GETOPT_EC
+
 while true; do
     case "$1" in
-        "-b")
-            if [[ $BASIC -ne 0 ]]; then
-                echoe "-b cannot be passed multiple times"
+        "-b"|"--basic")
+            if [[ $BASICSET -ne 0 ]]; then
+                echoe "$1 cannot be passed multiple times"
                 usage
             fi
-            BASIC=1
-            shift
+            BASICSET=1
+            HOSTNAME="$2"
+            shift 2
             continue
         ;;
-        "-v")
-            if [[ $VNC -ne 0 ]]; then
-                echoe "-v cannot be passed multiple times"
+        "-d"|"--de")
+            if [[ $DEFAULTDESET -ne 0 ]]; then
+                echoe "$1 cannot be passed multiple times"
                 usage
             fi
-            VNC=1
-            shift
+            validde $2 || (echoe "Unknown DE: $2" && usage)
+            DEFAULTDE="$2"
+            DEFAULTDESET=1
+            shift 2
             continue
         ;;
-        "-r")
-            if [[ $RDP -ne 0 ]]; then
-                echoe "-r cannot be passed multiple times"
+        "-v"|"--vnc")
+            if [[ $VNCSET -ne 0 ]]; then
+                echoe "$1 cannot be passed multiple times"
                 usage
             fi
-            RDP=1
-            shift
+            validde $2 || (echoe "Unknown DE: $2" && usage)
+            [[ -n "$2" ]] && VNC="$2"
+            VNCSET=1
+            shift 2
+            continue
+        ;;
+        "-r"|"--rdp")
+            if [[ $RDPSET -ne 0 ]]; then
+                echoe "$1 cannot be passed multiple times"
+                usage
+            fi
+            validde $2 || (echoe "Unknown DE: $2" && usage)
+            [[ -n "$2" ]] && RDP="$2"
+            RDPSET=1
+            shift 2
             continue
         ;;
         "--")
@@ -66,16 +127,11 @@ while true; do
         ;;
     esac
 done
-[[ $(($BASIC + $VNC + $RDP)) -eq 0 ]] && BASIC=1
-[[ $# -gt 1 ]] && usage
-HOSTNAME="$1"
+[[ $(($BASICSET + $VNCSET + $RDPSET)) -eq 0 ]] && usage
+[[ $# -ne 0 ]] && echoe "Received unknown arguments" && usage
 
-if [[ $BASIC -eq 1 ]]; then
+if [[ $BASICSET -eq 1 ]]; then
     echoe "+++ Basic setup"
-    if [[ -z "$HOSTNAME" ]]; then
-        echoe "No hostname passed while doing basic setup"
-        usage
-    fi
 
     echoe "+ Updating repositories"
     sudo $DEBNI apt-get update -y
@@ -137,81 +193,71 @@ EOF
     sudo ip6tables-save -f /etc/iptables/rules.v6
 fi
 
-if [[ $VNC -eq 1 ]]; then
+if [[ $VNCSET -eq 1 ]]; then
     echoe "+++ VNC setup (you will be prompted for your VNC password)"
 
     echoe "+ Installing dependencies"
-    sudo $DEBNI apt-get install -y xfce4{,-goodies} tightvncserver
+    sudo $DEBNI apt-get install -y $(depackages $VNC) tigervnc-standalone-server
 
     echoe "+ Adding files"
-    [[ -e "~/.vnc/xstartup" ]] && mv ~/.vnc/xstartup{,.bak}
-    mkdir -p ~/.vnc
-cat > ~/.vnc/xstartup << EOF
-#!/bin/sh
-xrdb ~/.Xresources
-startxfce4 &
-EOF
-    chmod +x ~/.vnc/xstartup
-
-sudo tee /etc/systemd/system/vncserver@.service > /dev/null << EOF
+    # Modified https://wiki.archlinux.org/title/TigerVNC#systemd_service_unit_run_as_user
+sudo tee /usr/lib/systemd/system/tigervnc@.service > /dev/null << EOF
 [Unit]
-Description=Start TightVNC server at startup
+Description=Remote desktop service (VNC)
 After=syslog.target network.target
 
 [Service]
-Type=forking
-User=$(id -un)
-Group=$(id -gn)
-WorkingDirectory=$HOME
-
-PIDFile=$HOME/.vnc/%H:%i.pid
-ExecStartPre=-/usr/bin/vncserver -kill :%i > /dev/null 2>&1
-ExecStart=/usr/bin/vncserver -depth 24 -geometry 1280x800 -localhost :%i
-ExecStop=/usr/bin/vncserver -kill :%i
+Type=simple
+# https://github.com/TigerVNC/tigervnc/issues/800#issuecomment-565669421
+Environment=LD_PRELOAD=/lib/aarch64-linux-gnu/libgcc_s.so.1
+ExecStart=/usr/bin/tigervncserver -depth 24 -geometry 1280x800 -localhost -fg %i
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
 EOF
+    mkdir -p ~/.vnc
+    if [[ ! -e ~/.vnc/ocloud-vncde ]]; then
+        [[ -e ~/.vnc/xstartup ]] && mv ~/.vnc/xstartup{,.oc}
+        echo "#!/bin/sh" > ~/.vnc/xstartup
+        echo "/etc/X11/Xsession \"~/.vnc/ocloud-vncde\"" >> ~/.vnc/xstartup
+        echo 'tigervncserver -kill $DISPLAY' >> ~/.vnc/xstartup
+        chmod +x ~/.vnc/xstartup
+    fi
+    echo "#!/bin/sh" > ~/.vnc/ocloud-vncde
+    echo "# Entire file auto-generated by ocloud" >> ~/.vnc/ocloud-vncde
+    decommand $VNC >> ~/.vnc/ocloud-vncde
+    chmod +x ~/.vnc/ocloud-vncde
 
     echoe "+ Setting VNC password (password not echoed back)"
     vncpasswd
 
     echoe "+ Staring vncserver"
-    sudo systemctl daemon-reload
-    sudo systemctl enable --now vncserver@1
-    systemctl status vncserver@1
+    systemctl --user daemon-reload
+    systemctl --user enable --now tigervnc@:1
+    systemctl --user status tigervnc@:1
+    # https://unix.stackexchange.com/a/559755
+    sudo loginctl enable-linger "$(id -un)"
 fi
 
-if [[ $RDP -eq 1 ]]; then
+if [[ $RDPSET -eq 1 ]]; then
     echoe "+++ RDP setup"
 
     echoe "+ Installing dependencies"
-    sudo $DEBNI apt-get install -y ubuntu-desktop gnome-session xrdp
+    sudo $DEBNI apt-get install -y $(depackages $RDP) xrdp
     systemctl status xrdp
     sudo usermod -aG ssl-cert xrdp
 
-    echoe "+ Editing files"
+    echoe "+ Adding files"
     sudo sed -iE 's/^new_cursors=true/new_cursors=false/' /etc/xrdp/xrdp.ini
-sudo patch /etc/xrdp/startwm.sh << EOF
---- a/etc/xrdp/startwm.sh	2020-01-10 20:14:57.000000000 +0000
-+++ b/etc/xrdp/startwm.sh	2022-05-04 13:14:39.311623941 +0000
-@@ -30,5 +30,7 @@
- 	. /etc/profile
- fi
- 
--test -x /etc/X11/Xsession && exec /etc/X11/Xsession
--exec /bin/sh /etc/X11/Xsession
-+#test -x /etc/X11/Xsession && exec /etc/X11/Xsession
-+#exec /bin/sh /etc/X11/Xsession
-+unset DBUS_SESSION_BUS_ADDRESS XDG_RUNTIME_DIR
-+exec gnome-session
-EOF
-cat > ~/.xsessionrc << EOF
-export GNOME_SHELL_SESSION_MODE=ubuntu
-export XDG_CURRENT_DESKTOP=ubuntu:GNOME
-export XDG_DATA_DIRS=/usr/share/ubuntu:/usr/local/share:/usr/share:/var/lib/snapd/desktop
-export XDG_CONFIG_DIRS=/etc/xdg/xdg-ubuntu:/etc/xdg
-EOF
+    if [[ ! -e ~/.xsessionrc ]]; then
+        echo "#!/bin/sh" > ~/.xsessionrc
+        echo "$(decommand $RDP) # Line auto-generated by ocloud" >> ~/.xsessionrc
+        chmod +x ~/.xsessionrc
+    else
+        egrep -q ".+ # Line auto-generated by ocloud$" ~/.xsessionrc ||
+            (echoe "Failed to locate DE line in .xsessionrc" && exit 1)
+        sed -iE "s/.+( # Line auto-generated by ocloud)\$/$(decommand $RDP)\1/" ~/.xsessionrc
+    fi
 
     sudo systemctl restart xrdp
     echoe "xrdp uses the account's password to login. To change it, run"
