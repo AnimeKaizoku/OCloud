@@ -82,7 +82,7 @@ if [[ $BASIC -eq 1 ]]; then
     echoe "+ Updating packages"
     sudo $DEBNI apt-get upgrade -y
     echoe "+ Installing packages"
-    sudo $DEBNI apt-get install -y neofetch speedtest-cli python3{,-pip} fail2ban iptables-persistent
+    sudo $DEBNI apt-get install -y neofetch speedtest-cli python3{,-pip} fail2ban iptables-persistent ffmpeg
     echoe "+ Removing unused dependencies"
     sudo $DEBNI apt-get autoremove -y
 
