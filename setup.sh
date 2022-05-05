@@ -218,7 +218,7 @@ EOF
     if [[ ! -e ~/.vnc/ocloud-vncde ]]; then
         [[ -e ~/.vnc/xstartup ]] && mv ~/.vnc/xstartup{,.oc}
         echo "#!/bin/sh" > ~/.vnc/xstartup
-        echo "/etc/X11/Xsession \"~/.vnc/ocloud-vncde\"" >> ~/.vnc/xstartup
+        echo "~/.vnc/ocloud-vncde" >> ~/.vnc/xstartup
         echo 'tigervncserver -kill $DISPLAY' >> ~/.vnc/xstartup
         chmod +x ~/.vnc/xstartup
     fi
@@ -229,7 +229,7 @@ EOF
 
     if [[ ! -e ~/.vnc/passwd ]]; then
         echoe "+ Setting VNC password (password not echoed back)"
-        vncpasswd
+        vncpasswd >&2
     fi
 
     echoe "+ Staring vncserver"
