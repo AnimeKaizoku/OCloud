@@ -57,7 +57,7 @@ function usage() {
     echoe "Options:"
     echoe "    -b, --basic: Run basic setup"
     echoe "    -d, --de: Set default DE for VNC and RDP (default: gnome)"
-    echoe "    -v, --vnc: Run VNC setup (interaction needed for password)"
+    echoe "    -v, --vnc: Run VNC setup (interaction needed for password if not set)"
     echoe "    -r, --rdp: Run RDP setup"
     exit 1
 }
@@ -194,7 +194,7 @@ EOF
 fi
 
 if [[ $VNCSET -eq 1 ]]; then
-    echoe "+++ VNC setup (you will be prompted for your VNC password)"
+    echoe "+++ VNC setup (you may be prompted for your VNC password)"
 
     echoe "+ Installing dependencies"
     sudo $DEBNI apt-get install -y $(depackages $VNC) tigervnc-standalone-server
@@ -228,8 +228,10 @@ EOF
     decommand $VNC >> ~/.vnc/ocloud-vncde
     chmod +x ~/.vnc/ocloud-vncde
 
-    echoe "+ Setting VNC password (password not echoed back)"
-    vncpasswd
+    if [[ ! -e ~/.vnc/passwd ]]; then
+        echoe "+ Setting VNC password (password not echoed back)"
+        vncpasswd
+    fi
 
     echoe "+ Staring vncserver"
     systemctl --user daemon-reload
