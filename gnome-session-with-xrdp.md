@@ -26,7 +26,7 @@ sudo apt-get install gnome-session
 ## tell xrdp to bring up gnome-session
 The following command will tell xrdp to use gnome-session (instead of using xfce-session or mate-session):
 ```sh
-sudo sed -Ezi.bak "s@test -x (/etc/X11/Xsession) && exec \1\nexec /bin/sh \1@exec gnome-session@" /etc/xrdp/startwm.sh
+sudo sed -E -z -i.bak "s@test -x (/etc/X11/Xsession) && exec \1\nexec /bin/sh \1@exec gnome-session@" /etc/xrdp/startwm.sh
 ```
 
 Disable `newcursors` because black background around cursor is displayed if using Xorg as session type.
