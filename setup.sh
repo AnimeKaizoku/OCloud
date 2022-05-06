@@ -200,6 +200,7 @@ if [[ $VNCSET -eq 1 ]]; then
 
     echoe "+ Adding files"
     # Modified https://wiki.archlinux.org/title/TigerVNC#systemd_service_unit_run_as_user
+[[ ! -e /usr/lib/systemd/user/tigervnc@.service ]] &&
 sudo tee /usr/lib/systemd/user/tigervnc@.service > /dev/null << EOF
 [Unit]
 Description=Remote desktop service (VNC)
@@ -214,6 +215,7 @@ ExecStart=/usr/bin/tigervncserver -depth 24 -geometry 1280x800 -localhost -fg %i
 [Install]
 WantedBy=default.target
 EOF
+
     mkdir -p ~/.vnc
     if [[ ! -e ~/.vnc/ocloud-vncde ]]; then
         [[ -e ~/.vnc/xstartup ]] && mv ~/.vnc/xstartup{,.oc}
