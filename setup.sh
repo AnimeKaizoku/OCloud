@@ -5,9 +5,10 @@ BASICSET=0
 HOSTNAME=""
 DEFAULTDE=gnome
 DEFAULTDESET=0
-VNC=$DEFAULTDE
+# empty strings will be set to DEFAULTDE
+VNC=""
 VNCSET=0
-RDP=$DEFAULTDE
+RDP=""
 RDPSET=0
 
 DEBNI="DEBIAN_FRONTEND=noninteractive"
@@ -106,7 +107,7 @@ while true; do
                 usage
             fi
             validde $2 || (echoe "Unknown DE: $2" && usage)
-            [[ -n "$2" ]] && VNC="$2"
+            VNC="$2"
             VNCSET=1
             shift 2
             continue
@@ -117,7 +118,7 @@ while true; do
                 usage
             fi
             validde $2 || (echoe "Unknown DE: $2" && usage)
-            [[ -n "$2" ]] && RDP="$2"
+            RDP="$2"
             RDPSET=1
             shift 2
             continue
@@ -134,6 +135,8 @@ while true; do
 done
 [[ $(($BASICSET + $VNCSET + $RDPSET)) -eq 0 ]] && usage
 [[ $# -ne 0 ]] && echoe "Received unknown arguments" && usage
+[[ -z "$VNC" ]] && VNC=$DEFAULTDE
+[[ -z "$RDP" ]] && RDP=$DEFAULTDE
 
 if [[ $BASICSET -eq 1 ]]; then
     echoe "+++ Basic setup"
