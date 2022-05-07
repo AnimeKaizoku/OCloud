@@ -19,7 +19,7 @@ function validde() {
 function depackages() {
     case "$@" in
         "xfce")
-            echo "xfce4{,-goodies}"
+            echo "xfce4 xfce4-goodies"
         ;;
         "gnome")
             echo "ubuntu-desktop gnome-session"
