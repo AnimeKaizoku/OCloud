@@ -58,7 +58,7 @@ function writeenvreset() {
     fi
 }
 function usage() {
-    echoe "Usage: $PROGNAME [--basic <new hostname>] [--de xfce|gnome|kde] [--vnc [de]] [--rdp [de]]"
+    echoe "Usage: $PROGNAME [--basic=<new hostname>] [--de=xfce|gnome|kde] [--vnc +=[de]] [--rdp=[de]]"
     echoe "Options:"
     echoe "    -b, --basic: Run basic setup"
     echoe "    -d, --de: Set default DE for VNC and RDP (default: gnome)"
