@@ -219,6 +219,7 @@ Type=simple
 # https://github.com/TigerVNC/tigervnc/issues/800#issuecomment-565669421
 Environment=LD_PRELOAD=/lib/aarch64-linux-gnu/libgcc_s.so.1
 ExecStart=/usr/bin/tigervncserver -depth 24 -geometry 1280x800 -localhost -fg %i
+ExecStop=/usr/bin/tigervncserver -kill %i
 
 [Install]
 WantedBy=default.target
@@ -245,7 +246,8 @@ EOF
 
     echoe "+ Staring vncserver"
     systemctl --user daemon-reload
-    systemctl --user enable --now tigervnc@:1
+    systemctl --user enable tigervnc@:1
+    systemctl --user restart tigervnc@:1
     # https://unix.stackexchange.com/a/559755
     sudo loginctl enable-linger "$(id -un)"
 fi
