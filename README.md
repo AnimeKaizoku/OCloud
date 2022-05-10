@@ -2,9 +2,20 @@
 
 A small repo with set of one run commands to set specific stuff on Ubuntu Env
 
-
 ```
-wget https://raw.githubusercontent.com/AnimeKaizoku/OCloud/main/setup.sh && bash setup.sh senbonzakura
+Usage: ./setup.sh [--basic=<new hostname>] [--de=xfce|gnome|kde] [--vnc +=[de]] [--rdp=[de]]
+Options:
+    -b, --basic: Run basic setup
+    -d, --de: Set default DE for VNC and RDP (default: gnome)
+    -v, --vnc: Run VNC setup (interaction needed for password if not set)
+    -r, --rdp: Run RDP setup
+```
+
+Examples: 
+
+Setup basic ubuntu base + vnc + rdp with gnome environment
+```
+wget https://raw.githubusercontent.com/AnimeKaizoku/OCloud/main/setup.sh --basic=senbonzakura --de=gnone --vnc=gnome --rdp=gnome
 ```
 
 
