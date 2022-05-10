@@ -68,6 +68,8 @@ function usage() {
     exit 1
 }
 
+[[ $UID -eq 0 ]] && echoe "$0 must not be run as root!" && exit 1
+
 # getopt usage stolen from /usr/share/doc/util-linux/getopt-example.bash
 set +e # we want rc from getopt
 GETOPT_RES=$(getopt -o "b:d:v::r::" --long "basic:,de:,vnc::,rdp::" -n "$PROGNAME" -- "$@")
