@@ -55,11 +55,11 @@ function echoe() {
 }
 function writeenvreset() {
     if [[ ! -e /etc/X11/Xsession.d/10ocloud-envvars ]]; then
-        echo "unset DBUS_SESSION_BUS_ADDRESS XDG_RUNTIME_DIR" | sudo tee /etc/X11/Xsession.d/10ocloud-envvars
+        echo "unset DBUS_SESSION_BUS_ADDRESS XDG_RUNTIME_DIR" | sudo tee /etc/X11/Xsession.d/10ocloud-envvars > /dev/null
     fi
 }
 function usage() {
-    echoe "Usage: $PROGNAME [--basic=<new hostname>] [--de=xfce|gnome|kde] [--vnc +=[de]] [--rdp=[de]]"
+    echoe "Usage: $PROGNAME [--basic=<new hostname>] [--de=xfce|gnome|kde] [--vnc=[de]] [--rdp=[de]]"
     echoe "Options:"
     echoe "    -b, --basic: Run basic setup"
     echoe "    -d, --de: Set default DE for VNC and RDP (default: gnome)"
