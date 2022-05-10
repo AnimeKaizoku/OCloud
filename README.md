@@ -15,7 +15,7 @@ Examples:
 
 Setup basic ubuntu base + vnc + rdp with gnome environment
 ```
-wget https://raw.githubusercontent.com/AnimeKaizoku/OCloud/main/setup.sh --basic=senbonzakura --de=gnone --vnc=gnome --rdp=gnome
+wget https://raw.githubusercontent.com/AnimeKaizoku/OCloud/main/setup.sh && sudo bash setup.sh--basic=senbonzakura --de=gnone --vnc=gnome --rdp=gnome
 ```
 
 
