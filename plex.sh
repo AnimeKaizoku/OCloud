@@ -19,6 +19,7 @@ sudo iptables -F
 sudo mkdir -p /home/plex/{plexcloud,cache}
 sudo chown -R plex:plex /home/plex
 sudo sed -i -E 's/^#user_allow_other/user_allow_other/' /etc/fuse.conf
+sudo systemctl enable --now plexmediaserver.service
 
 echoe "Connect to the server with \"-L 32400:localhost:32400\", e.g."
 echoe "\"ssh -L 32400:localhost:32400 ubuntu@ip\". Then open"
