@@ -9,7 +9,7 @@ echoe "+ Downloading plex"
 DOWNLOAD_URL=$(curl --silent --show-error https://plex.tv/api/downloads/5.json | tr -d '\n' | sed -E 's@.+"(https://.+?/([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+-[0-9a-f]{8,})/debian/plexmediaserver_\2_arm64\.deb)".+@\1@')
 [[ -z "$DOWNLOAD_URL" ]] && echoe "Received empty download URL" && exit 1
 PACKAGE_PATH=$(mktemp)
-curl --output="$PACKAGE_PATH" -- "$DOWNLOAD_URL"
+curl --output "$PACKAGE_PATH" "$DOWNLOAD_URL"
 echoe "+ Installing plex"
 sudo dpkg -i "$PACKAGE_PATH"
 rm -- "$PACKAGE_PATH"
