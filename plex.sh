@@ -1,6 +1,7 @@
 #!/bin/bash
 
 set -e
+umask g=,o=
 function echoe() {
     echo $@ >&2
 }
