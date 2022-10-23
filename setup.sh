@@ -164,7 +164,7 @@ if [[ $BASICSET -eq 1 ]]; then
     sudo chmod +x /etc/profile.d/ocloud-go.sh
 
     echoe "+ Enabling fail2ban"
-    sudo systemctl enable fail2ban
+    sudo systemctl enable --now fail2ban
     echoe "+ Setting hostname to $HOSTNAME"
     sudo sed -i '/preserve_hostname: false/c\preserve_hostname: true' /etc/cloud/cloud.cfg
     sudo hostnamectl set-hostname -- "$HOSTNAME"
