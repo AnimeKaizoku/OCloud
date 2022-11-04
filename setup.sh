@@ -206,7 +206,7 @@ if [[ $VNCSET -eq 1 ]]; then
     echoe "+++ VNC setup (you may be prompted for your VNC password)"
 
     echoe "+ Installing dependencies"
-    sudo $DEBNI apt-get install -y $(depackages $VNC) tigervnc-standalone-server
+    sudo $DEBNI apt-get install -y $(depackages $VNC) tigervnc-standalone-server dbus-x11
 
     echoe "+ Adding files"
     # Modified https://wiki.archlinux.org/title/TigerVNC#systemd_service_unit_run_as_user
@@ -258,7 +258,7 @@ if [[ $RDPSET -eq 1 ]]; then
     echoe "+++ RDP setup"
 
     echoe "+ Installing dependencies"
-    sudo $DEBNI apt-get install -y $(depackages $RDP) xrdp
+    sudo $DEBNI apt-get install -y $(depackages $RDP) xrdp dbus-x11
     sudo usermod -aG ssl-cert xrdp
 
     echoe "+ Adding files"
