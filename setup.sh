@@ -161,9 +161,9 @@ if [[ $BASICSET -eq 1 ]]; then
     echoe "+ Removing unused dependencies"
     sudo $DEBNI apt-get autoremove -y
 
-    echoe "+ Downloading go 1.18.1"
+    echoe "+ Downloading go 1.19.3"
     GOTAR=$(mktemp)
-    wget --output-document="$GOTAR" https://go.dev/dl/go1.18.1.linux-arm64.tar.gz
+    wget --output-document="$GOTAR" https://go.dev/dl/go1.19.3.linux-arm64.tar.gz
     echoe "+ Deleting go"
     sudo rm -rf /usr/local/go
     echoe "+ Extracting go"
