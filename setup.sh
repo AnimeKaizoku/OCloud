@@ -147,8 +147,17 @@ if [[ $BASICSET -eq 1 ]]; then
     sudo $DEBNI apt-get update -y
     echoe "+ Updating packages"
     sudo $DEBNI apt-get dist-upgrade -y
+
+    echoe "+ Adding cloudflared's repository"
+    UBUNTU_CODENAME="$(lsb_release -cs)"
+    sudo mkdir -p --mode=u=rwx,g=rx,o=rx /usr/share/keyrings
+    curl -fL https://pkg.cloudflare.com/cloudflare-main.gpg | sudo tee /usr/share/keyrings/cloudflare-main.gpg > /dev/null
+    echo "deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared $UBUNTU_CODENAME main" | sudo tee /etc/apt/sources.list.d/cloudflared.list > /dev/null
+
+    echoe "+ Updating repositories again"
+    sudo $DEBNI apt-get update -y
     echoe "+ Installing packages"
-    sudo $DEBNI apt-get install -y neofetch speedtest-cli python3{,-pip} fail2ban iptables-persistent ffmpeg
+    sudo $DEBNI apt-get install -y neofetch speedtest-cli python3{,-pip} fail2ban iptables-persistent ffmpeg cloudflared
     echoe "+ Removing unused dependencies"
     sudo $DEBNI apt-get autoremove -y
 
